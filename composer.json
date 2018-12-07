@@ -1,0 +1,22 @@
+{
+    "name": "qbil-software/read-soft-online",
+    "description": "ReadSoftOnline PHP client",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Qbil\\ReadSoftOnline\\": "src/Qbil"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Faizan Akram",
+            "email": "hello@faizanakram.me"
+        }
+    ],
+    "minimum-stability": "stable"
+}
