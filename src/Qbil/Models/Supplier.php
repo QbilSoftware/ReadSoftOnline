@@ -213,6 +213,13 @@ class Supplier implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        return get_object_vars($this);
+        return array_reduce(
+            array_keys($supplier = get_object_vars($this)),
+            function ($acc, $property) use ($supplier) {
+                $acc[ucfirst($property)] = $supplier[$property];
+                return $acc;
+            },
+            []
+        );
     }
 }
