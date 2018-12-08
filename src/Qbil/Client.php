@@ -36,19 +36,25 @@ class Client
         $this->headers['x-rs-key'] = $apiKey;
         $this->client = new \GuzzleHttp\Client([
             'base_uri' => 'https://services.readsoftonline.com',
+            'cookies' => true,
         ]);
+    }
+
+    public function setHeaders($headers)
+    {
+        $this->headers = array_merge($this->headers, $headers);
     }
 
     public function isAuthenticated(): bool
     {
-        return json_decode($this->request('GET', '/authentication/rest/isauthenticated')->getBody()->getContents())->value;
+        return json_decode($this->request('GET', '/authentication/rest/isauthenticated')->getBody()->getContents())->Value;
     }
 
     public function authenticate(string $userName, string $password)
     {
         return $this
             ->request('POST', '/authentication/rest/authenticate', [
-                    'body' => [
+                    'json' => [
                         "UserName" => $userName,
                         "Password" => $password,
                         "AuthenticationType" => 0,
@@ -120,7 +126,7 @@ class Client
     {
         return $this
             ->request('PUT', "/masterdata/rest/{$buyer->getId()}/suppliers", [
-                'body' => json_encode($suppliers, true)
+                'json' => json_encode($suppliers, true)
             ])
             ->getBody()
             ->getContents();
@@ -135,6 +141,6 @@ class Client
      */
     private function request(string $method, string $route, array $options = [])
     {
-        return $this->client->request($method, $route, $options);
+        return $this->client->request($method, $route, array_merge($options, ['headers' => $this->headers]));
     }
 }

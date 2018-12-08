@@ -13,11 +13,11 @@ class Customer
 {
     public function __construct(array $customer)
     {
-        $this->id = $customer['id'];
-        $this->name = $customer['name'];
-        $this->externalId = $customer['externalId'];
-        $this->activationStatus = $customer['activationStatus'];
-        $this->classificationValue = $customer['classificationValue'];
+        $this->id = $customer['Id'];
+        $this->name = $customer['Name'];
+        $this->externalId = $customer['ExternalId'];
+        $this->activationStatus = $customer['ActivationStatus'];
+        $this->classificationValue = $customer['ClassificationValue'];
     }
 
     private $id;

@@ -13,21 +13,21 @@ class Buyer
 {
     public function __construct(array $buyer)
     {
-        $this->id = $buyer['id'];
-        $this->name = $buyer['name'];
-        $this->externalId = $buyer['externalId'];
-        $this->vatNumber = $buyer['vatNumber'];
-        $this->addressCountry = $buyer['addressCountry'];
-        $this->addressStreetAddress = $buyer['addressStreetAddress'];
-        $this->addressPostcode = $buyer['addressPostcode'];
-        $this->addressCity = $buyer['addressCity'];
-        $this->phoneNumber = $buyer['phoneNumber'];
-        $this->fax = $buyer['fax'];
-        $this->alternativeName1 = $buyer['alternativeName1'];
-        $this->alternativeName2 = $buyer['alternativeName2'];
-        $this->alternativeName3 = $buyer['alternativeName3'];
-        $this->organizationNumber = $buyer['organizationNumber'];
-        $this->addressState = $buyer['addressState'];
+        $this->id = $buyer['Id'];
+        $this->name = $buyer['Name'];
+        $this->externalId = $buyer['ExternalId'];
+        $this->vatNumber = $buyer['VatNumber'];
+        $this->addressCountry = $buyer['AddressCountry'];
+        $this->addressStreetAddress = $buyer['AddressStreetAddress'];
+        $this->addressPostcode = $buyer['AddressPostcode'];
+        $this->addressCity = $buyer['AddressCity'];
+        $this->phoneNumber = $buyer['PhoneNumber'];
+        $this->fax = $buyer['Fax'];
+        $this->alternativeName1 = $buyer['AlternativeName1'];
+        $this->alternativeName2 = $buyer['AlternativeName2'];
+        $this->alternativeName3 = $buyer['AlternativeName3'];
+        $this->organizationNumber = $buyer['OrganizationNumber'];
+        $this->addressState = $buyer['AddressState'];
     }
 
     private $id;
