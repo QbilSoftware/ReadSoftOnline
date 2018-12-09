@@ -117,15 +117,15 @@ class Client
     }
 
     /**
-     * @param Buyer $buyer
+     * @param string $organizationId (Buyer id or Customer id) depends upon setting enabled in RSO
      * @param Supplier[] $suppliers
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function setSuppliers(Buyer $buyer, array $suppliers)
+    public function setSuppliers($organizationId, array $suppliers)
     {
         return $this
-            ->request('PUT', "/masterdata/rest/{$buyer->getId()}/suppliers", [
+            ->request('PUT', "/masterdata/rest/{$organizationId}/suppliers", [
                 'json' => json_encode($suppliers)
             ])
             ->getBody()
