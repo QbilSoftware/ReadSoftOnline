@@ -10,9 +10,8 @@ namespace Qbil\ReadSoftOnline\Models;
 
 class Supplier implements \JsonSerializable
 {
-    public function __construct($id, $supplierNumber, $name, $description = null, $taxRegistrationNumber = null, $street = null, $postalCode = null, $city = null, $countryName = null, $paymentTerm = null, $paymentMethod = null, $currencyCode = null, $location = null, $state = null, $faxNumber = null, $taxCode = null)
+    public function __construct($supplierNumber, $name, $description = null, $taxRegistrationNumber = null, $street = null, $postalCode = null, $city = null, $countryName = null, $paymentTerm = null, $paymentMethod = null, $currencyCode = null, $location = null, $state = null, $faxNumber = null, $taxCode = null, $guid = null)
     {
-        $this->id = $id;
         $this->supplierNumber = $supplierNumber;
         $this->name = $name;
         $this->description = $description;
@@ -28,6 +27,7 @@ class Supplier implements \JsonSerializable
         $this->state = $state;
         $this->faxNumber = $faxNumber;
         $this->taxCode = $taxCode;
+        $this->id = $guid;
     }
 
     private $supplierNumber;
