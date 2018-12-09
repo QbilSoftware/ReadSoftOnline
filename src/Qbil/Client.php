@@ -126,7 +126,7 @@ class Client
     {
         return $this
             ->request('PUT', "/masterdata/rest/{$organizationId}/suppliers", [
-                'json' => json_encode($suppliers)
+                'json' => json_decode(json_encode($suppliers), true)
             ])
             ->getBody()
             ->getContents();
