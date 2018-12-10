@@ -11,6 +11,7 @@ namespace Qbil\ReadSoftOnline;
 use Psr\Http\Message\ResponseInterface;
 use Qbil\ReadSoftOnline\Models\Buyer;
 use Qbil\ReadSoftOnline\Models\Customer;
+use Qbil\ReadSoftOnline\Models\Document;
 use Qbil\ReadSoftOnline\Models\OutputDocument;
 use Qbil\ReadSoftOnline\Models\Supplier;
 
@@ -147,16 +148,52 @@ class Client
     /**
      * @param OutputDocument $document
      *
-     * @return string
+     * @return Document
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getDocument(OutputDocument $document)
     {
-        return $this
-            ->request('GET', "/documents/rest/{$document->getDocumentId()}")
-            ->getBody()
-            ->getContents();
+        return new Document(
+            json_decode(
+                $this
+                    ->request('GET', "/documents/rest/{$document->getDocumentId()}")
+                    ->getBody()
+                    ->getContents(),
+                true
+            )
+        );
+    }
+
+    /**
+     * @param Document $document
+     *
+     * @param $status
+     * @return bool
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function setDocumentStatus(Document $document, $status)
+    {
+        return json_decode(
+            $this
+                ->request(
+                    'PUT',
+                    "/documents/rest/{$document->Id}/documentstatus",
+                    [
+                        'json' => [
+                            'Status' => $status,
+                            'Message' => null,
+                            'CodingLines' => null,
+                            'CorrelationData' => null,
+                            'ExternalId' => null,
+                            'ValidationInfoCollection' => null,
+                        ],
+                    ]
+                )
+                ->getBody()
+                ->getContents()
+        )->Value;
     }
 
     /**
