@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: Faizan Akram <hello@faizanakram.me>
  * Date: 7/12/18
- * Time: 8:09 PM
+ * Time: 8:09 PM.
  */
 
 namespace Qbil\ReadSoftOnline;
@@ -11,6 +11,7 @@ namespace Qbil\ReadSoftOnline;
 use Psr\Http\Message\ResponseInterface;
 use Qbil\ReadSoftOnline\Models\Buyer;
 use Qbil\ReadSoftOnline\Models\Customer;
+use Qbil\ReadSoftOnline\Models\OutputDocument;
 use Qbil\ReadSoftOnline\Models\Supplier;
 
 class Client
@@ -18,11 +19,11 @@ class Client
     private $client;
 
     private $headers = [
-        "Accept" => "application/json",
-        "Content-Type" => "application/json",
-        "x-rs-culture" => "en-US",
-        "x-rs-uiculture" => "en-US",
-        "x-rs-version" => "2018-12-05",
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'x-rs-culture' => 'en-US',
+        'x-rs-uiculture' => 'en-US',
+        'x-rs-version' => '2018-12-05',
     ];
 
     /** @var Customer[] */
@@ -55,12 +56,12 @@ class Client
         return $this
             ->request('POST', '/authentication/rest/authenticate', [
                     'json' => [
-                        "UserName" => $userName,
-                        "Password" => $password,
-                        "AuthenticationType" => 0,
-                        "AuthenticationOptions" => 0,
-                        "AuthenticationChallangeResponse" => null,
-                        "ClientDeviceDescription" => null,
+                        'UserName' => $userName,
+                        'Password' => $password,
+                        'AuthenticationType' => 0,
+                        'AuthenticationOptions' => 0,
+                        'AuthenticationChallangeResponse' => null,
+                        'ClientDeviceDescription' => null,
                     ],
                 ]
             )
@@ -69,6 +70,7 @@ class Client
 
     /**
      * @return Customer[]
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getCustomers()
@@ -93,7 +95,9 @@ class Client
 
     /**
      * @param Customer $customer
+     *
      * @return Buyer[]
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getBuyers(Customer $customer)
@@ -117,16 +121,57 @@ class Client
     }
 
     /**
-     * @param string $organizationId (Buyer id or Customer id) depends upon setting enabled in RSO
-     * @param Supplier[] $suppliers
+     * @param Customer $customer
+     *
+     * @return OutputDocument[]
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getOutputDocuments(Customer $customer)
+    {
+        return
+            array_map(
+                function ($document) {
+                    return new OutputDocument($document);
+                },
+                json_decode(
+                    $this
+                        ->request('GET', "/documents/rest/customers/{$customer->getId()}/outputdocuments")
+                        ->getBody()
+                        ->getContents(),
+                    true
+                )
+            );
+    }
+
+    /**
+     * @param OutputDocument $document
+     *
      * @return string
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getDocument(OutputDocument $document)
+    {
+        return $this
+            ->request('GET', "/documents/rest/{$document->getDocumentId()}")
+            ->getBody()
+            ->getContents();
+    }
+
+    /**
+     * @param string     $organizationId (Buyer id or Customer id) depends upon setting enabled in RSO
+     * @param Supplier[] $suppliers
+     *
+     * @return string
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function setSuppliers($organizationId, array $suppliers)
     {
         return $this
             ->request('PUT', "/masterdata/rest/{$organizationId}/suppliers", [
-                'json' => json_decode(json_encode($suppliers), true)
+                'json' => json_decode(json_encode($suppliers), true),
             ])
             ->getBody()
             ->getContents();
@@ -135,11 +180,13 @@ class Client
     /**
      * @param string $method
      * @param string $route
-     * @param array $options
+     * @param array  $options
+     *
      * @return ResponseInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function request(string $method, string $route, array $options = [])
+    protected function request(string $method, string $route, array $options = [])
     {
         return $this->client->request($method, $route, array_merge($options, ['headers' => $this->headers]));
     }
