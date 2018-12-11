@@ -135,7 +135,7 @@ class Invoice
     }
 
     /**
-     * @return array
+     * @return InvoiceLine[]
      */
     public function getInvoiceLines()
     {
