@@ -12,11 +12,15 @@ use Psr\Http\Message\ResponseInterface;
 use Qbil\ReadSoftOnline\Models\Buyer;
 use Qbil\ReadSoftOnline\Models\Customer;
 use Qbil\ReadSoftOnline\Models\Document;
+use Qbil\ReadSoftOnline\Models\Invoice;
 use Qbil\ReadSoftOnline\Models\OutputDocument;
 use Qbil\ReadSoftOnline\Models\Supplier;
 
 class Client
 {
+    const STATUS_SUCCESS = 1;
+    const STATUS_REJECTED = 0;
+
     private $client;
 
     private $headers = [
@@ -168,7 +172,17 @@ class Client
     /**
      * @param Document $document
      *
+     * @return Invoice
+     */
+    public function getProcessedInvoice(Document $document)
+    {
+        return new Invoice($document);
+    }
+
+    /**
+     * @param Document $document
      * @param $status
+     *
      * @return bool
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -226,5 +240,10 @@ class Client
     protected function request(string $method, string $route, array $options = [])
     {
         return $this->client->request($method, $route, array_merge($options, ['headers' => $this->headers]));
+    }
+
+    protected function extract(array $property, $key, $subKey = 'Text')
+    {
+        return $property[array_search($key, array_column($property, 'Type'))][$subKey];
     }
 }
