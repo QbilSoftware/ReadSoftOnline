@@ -18,8 +18,8 @@ class Invoice
         $this->supplierInvoiceNumber = $this->extract($document->HeaderFields, 'invoicenumber');
         $this->amount = $this->extract($document->HeaderFields, 'invoicetotalvatexcludedamount');
         $this->vatAmount = $this->extract($document->HeaderFields, 'invoicetotalvatamount');
-        $this->invoiceDate = \DateTime::createFromFormat('Ymd', $this->extract($document->HeaderFields, 'invoicedate'));
-        $this->dueDate = \DateTime::createFromFormat('Ymd', $this->extract($document->HeaderFields, 'invoiceduedate'));
+        $this->invoiceDate = \DateTime::createFromFormat('Ymd', $this->extract($document->HeaderFields, 'invoicedate')) ?: null;
+        $this->dueDate = \DateTime::createFromFormat('Ymd', $this->extract($document->HeaderFields, 'invoiceduedate')) ?: null;
         $this->currency = $this->extract($document->HeaderFields, 'invoicecurrency');
         $this->theirVatRegistration = $this->extract($document->HeaderFields, 'suppliervatregistrationnumber');
         $this->ourVatRegistration = $this->extract($document->HeaderFields, 'CustomerVATRegistrationNumber');
