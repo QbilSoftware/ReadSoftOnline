@@ -10,13 +10,14 @@ namespace Qbil\ReadSoftOnline\Models;
 
 class InvoiceLine
 {
-    public function __construct($order, $quantity, $amount, $price, $type)
+    public function __construct($order, $quantity, $amount, $price, $type, $allocatedInvoice = null)
     {
         $this->order = $order;
         $this->quantity = $quantity;
         $this->amount = $amount;
         $this->price = $price;
         $this->type = $type;
+        $this->allocatedInvoice = $allocatedInvoice;
     }
 
     private $order;
@@ -24,6 +25,7 @@ class InvoiceLine
     private $amount;
     private $price;
     private $type;
+    private $allocatedInvoice;
 
     /**
      * @return mixed
@@ -66,10 +68,26 @@ class InvoiceLine
     }
 
     /**
+     * @return mixed
+     */
+    public function getAllocatedInvoice()
+    {
+        return $this->allocatedInvoice;
+    }
+
+    /**
      * @param mixed $type
      */
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @param mixed $type
+     */
+    public function setAllocatedInvoice($allocatedInvoice)
+    {
+        $this->allocatedInvoice = $allocatedInvoice;
     }
 }
