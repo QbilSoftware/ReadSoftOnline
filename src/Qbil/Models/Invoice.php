@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: faizan
  * Date: 11/12/18
- * Time: 4:03 PM
+ * Time: 4:03 PM.
  */
 
 namespace Qbil\ReadSoftOnline\Models;
-
 
 class Invoice
 {
@@ -23,6 +22,7 @@ class Invoice
         $this->currency = $this->extract($document->HeaderFields, 'invoicecurrency');
         $this->theirVatRegistration = $this->extract($document->HeaderFields, 'suppliervatregistrationnumber');
         $this->ourVatRegistration = $this->extract($document->HeaderFields, 'CustomerVATRegistrationNumber');
+        $this->orderNumber = $this->extract($document->HeaderFields, 'invoiceordernumber');
 
         foreach (array_column($this->extract($document->Tables, 'LineItem', 'TableRows'), 'ItemFields') as $line) {
             $invoiceLine = new InvoiceLine(
@@ -47,6 +47,7 @@ class Invoice
     private $currency;
     private $theirVatRegistration;
     private $ourVatRegistration;
+    private $orderNumber;
     private $invoiceLines = [];
 
     public function addInvoiceLine(InvoiceLine $invoiceLine)
@@ -145,5 +146,13 @@ class Invoice
     private function extract(array $property, $key, $subKey = 'Text')
     {
         return $property[array_search($key, array_column($property, 'Type'))][$subKey];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->orderNumber;
     }
 }
