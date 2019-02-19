@@ -23,6 +23,7 @@ class Invoice
         $this->theirVatRegistration = $this->extract($document->HeaderFields, 'suppliervatregistrationnumber');
         $this->ourVatRegistration = $this->extract($document->HeaderFields, 'CustomerVATRegistrationNumber');
         $this->orderNumber = $this->extract($document->HeaderFields, 'invoiceordernumber');
+        $this->contract = $this->extract($document->HeaderFields, 'Inkoopcontract');
 
         foreach (array_column($this->extract($document->Tables, 'LineItem', 'TableRows'), 'ItemFields') as $line) {
             $invoiceLine = new InvoiceLine(
@@ -30,6 +31,7 @@ class Invoice
                 $this->extract($line, 'LIT_DeliveredQuantity'),
                 $this->extract($line, 'LIT_VatExcludedAmount'),
                 $this->extract($line, 'LIT_UnitPriceAmount'),
+                $this->extract($line, 'LIT_Inkoopcontract'),
                 $document->DocumentSubType
             );
 
@@ -48,6 +50,7 @@ class Invoice
     private $theirVatRegistration;
     private $ourVatRegistration;
     private $orderNumber;
+    private $contract;
     private $invoiceLines = [];
 
     public function addInvoiceLine(InvoiceLine $invoiceLine)
@@ -154,5 +157,13 @@ class Invoice
     public function getOrder()
     {
         return $this->orderNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContract()
+    {
+        return $this->contract;
     }
 }

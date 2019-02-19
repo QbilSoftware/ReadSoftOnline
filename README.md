@@ -16,7 +16,7 @@ The package is fairly simple. All you need to do is install this package via [co
 **Installation**
 1. `composer require qbil-software/read-soft-online`
 2. `require_once 'vendor/autoload.php';`
-3. `$client = new Client('insert_api_key_here');`
+3. `$client = new Qbil\ReadSoftOnline\Client('insert_api_key_here');`
 4. Authenticate using `$client->authenticate('rso username here', 'rso password here')`
 
 
