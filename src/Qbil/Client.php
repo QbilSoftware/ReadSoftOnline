@@ -242,8 +242,17 @@ class Client
         return $this->client->request($method, $route, array_merge($options, ['headers' => $this->headers]));
     }
 
+    /**
+     * @param array $property
+     * @param $key
+     * @param string $subKey
+     *
+     * @return mixed
+     *
+     * @deprecated This method is only for backward compatibility and will be removed in v2.0, use Util::extract() instead
+     */
     protected function extract(array $property, $key, $subKey = 'Text')
     {
-        return $property[array_search($key, array_column($property, 'Type'))][$subKey];
+        return Util::extract($property, $key, $subKey);
     }
 }
