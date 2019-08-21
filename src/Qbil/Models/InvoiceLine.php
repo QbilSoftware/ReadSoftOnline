@@ -78,22 +78,6 @@ class InvoiceLine implements InvoiceLineInterface
     }
 
     /**
-     * @param mixed $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @param $allocatedInvoice
-     */
-    public function setAllocatedInvoice($allocatedInvoice)
-    {
-        $this->allocatedInvoice = $allocatedInvoice;
-    }
-
-    /**
      * @return mixed
      */
     public function getPurchaseContract()
