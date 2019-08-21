@@ -8,9 +8,9 @@
 
 namespace Qbil\ReadSoftOnline\Models;
 
-class InvoiceLine
+class InvoiceLine implements InvoiceLineInterface
 {
-    public function __construct($order, $quantity, $amount, $price, $purchaseContract, $type, $allocatedInvoice = null)
+    public function __construct(string $order, float $quantity, float $amount, float $price, string $purchaseContract, string $type, ?string $allocatedInvoice = null)
     {
         $this->order = $order;
         $this->quantity = $quantity;

@@ -10,34 +10,36 @@ namespace Qbil\ReadSoftOnline\Models;
 
 use Qbil\ReadSoftOnline\Util;
 
-class Invoice
+class Invoice implements InvoiceInterface
 {
-    public function __construct(Document $document)
+    public function __construct(Document $document, bool $includeInvoiceLines = true)
     {
-        $this->relation = $this->extract($document->Parties, 'supplier', 'ExternalId');
-        $this->subsidiary = $this->extract($document->Parties, 'buyer', 'ExternalId');
-        $this->supplierInvoiceNumber = $this->extract($document->HeaderFields, 'invoicenumber');
-        $this->amount = $this->extract($document->HeaderFields, 'invoicetotalvatexcludedamount');
-        $this->vatAmount = $this->extract($document->HeaderFields, 'invoicetotalvatamount');
-        $this->invoiceDate = \DateTime::createFromFormat('Ymd', $this->extract($document->HeaderFields, 'invoicedate')) ?: null;
-        $this->dueDate = \DateTime::createFromFormat('Ymd', $this->extract($document->HeaderFields, 'invoiceduedate')) ?: null;
-        $this->currency = $this->extract($document->HeaderFields, 'invoicecurrency');
-        $this->theirVatRegistration = $this->extract($document->HeaderFields, 'suppliervatregistrationnumber');
-        $this->ourVatRegistration = $this->extract($document->HeaderFields, 'CustomerVATRegistrationNumber');
-        $this->orderNumber = $this->extract($document->HeaderFields, 'invoiceordernumber');
-        $this->contract = $this->extract($document->HeaderFields, 'Inkoopcontract');
+        $this->relation = Util::extract($document->Parties, 'supplier', 'ExternalId');
+        $this->subsidiary = Util::extract($document->Parties, 'buyer', 'ExternalId');
+        $this->supplierInvoiceNumber = Util::extract($document->HeaderFields, 'invoicenumber');
+        $this->amount = Util::extract($document->HeaderFields, 'invoicetotalvatexcludedamount');
+        $this->vatAmount = Util::extract($document->HeaderFields, 'invoicetotalvatamount');
+        $this->invoiceDate = \DateTime::createFromFormat('Ymd', Util::extract($document->HeaderFields, 'invoicedate')) ?: null;
+        $this->dueDate = \DateTime::createFromFormat('Ymd', Util::extract($document->HeaderFields, 'invoiceduedate')) ?: null;
+        $this->currency = Util::extract($document->HeaderFields, 'invoicecurrency');
+        $this->theirVatRegistration = Util::extract($document->HeaderFields, 'suppliervatregistrationnumber');
+        $this->ourVatRegistration = Util::extract($document->HeaderFields, 'CustomerVATRegistrationNumber');
+        $this->orderNumber = Util::extract($document->HeaderFields, 'invoiceordernumber');
+        $this->contract = Util::extract($document->HeaderFields, 'Inkoopcontract');
 
-        foreach (array_column($this->extract($document->Tables, 'LineItem', 'TableRows'), 'ItemFields') as $line) {
-            $invoiceLine = new InvoiceLine(
-                $this->extract($line, 'LIT_OrderNumber'),
-                $this->extract($line, 'LIT_DeliveredQuantity'),
-                $this->extract($line, 'LIT_VatExcludedAmount'),
-                $this->extract($line, 'LIT_UnitPriceAmount'),
-                $this->extract($line, 'LIT_Inkoopcontract'),
-                $document->DocumentSubType
-            );
+        if ($includeInvoiceLines) {
+            foreach (array_column(Util::extract($document->Tables, 'LineItem', 'TableRows'), 'ItemFields') as $line) {
+                $invoiceLine = new InvoiceLine(
+                    Util::extract($line, 'LIT_OrderNumber'),
+                    Util::extract($line, 'LIT_DeliveredQuantity'),
+                    Util::extract($line, 'LIT_VatExcludedAmount'),
+                    Util::extract($line, 'LIT_UnitPriceAmount'),
+                    Util::extract($line, 'LIT_Inkoopcontract'),
+                    $document->DocumentSubType
+                );
 
-            $this->addInvoiceLine($invoiceLine);
+                $this->addInvoiceLine($invoiceLine);
+            }
         }
     }
 
@@ -55,7 +57,7 @@ class Invoice
     private $contract;
     private $invoiceLines = [];
 
-    public function addInvoiceLine(InvoiceLine $invoiceLine)
+    public function addInvoiceLine(InvoiceLineInterface $invoiceLine)
     {
         $this->invoiceLines[] = $invoiceLine;
     }
@@ -146,20 +148,6 @@ class Invoice
     public function getInvoiceLines()
     {
         return $this->invoiceLines;
-    }
-
-    /**
-     * @param array $property
-     * @param $key
-     * @param string $subKey
-     *
-     * @return mixed
-     *
-     * @deprecated This method is only for backward compatibility and will be removed in v2.0, use Util::extract() instead
-     */
-    private function extract(array $property, $key, $subKey = 'Text')
-    {
-        return Util::extract($property, $key, $subKey);
     }
 
     /**
