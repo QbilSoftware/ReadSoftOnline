@@ -6,10 +6,7 @@ namespace Qbil\ReadSoftOnline\Models;
 
 interface InvoiceInterface
 {
-    /**
-     * @return InvoiceLineInterface[]
-     */
-    public function addInvoiceLine();
+    public function addInvoiceLine(InvoiceLineInterface $invoiceLine);
     public function getRelation();
     public function getSubsidiary();
     public function getSupplierInvoiceNumber();
@@ -20,6 +17,9 @@ interface InvoiceInterface
     public function getCurrency();
     public function getTheirVatRegistration();
     public function getOurVatRegistration();
+    /**
+     * @return InvoiceLineInterface[]
+     */
     public function getInvoiceLines();
     public function getOrder();
     public function getContract();
