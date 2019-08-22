@@ -54,6 +54,16 @@ class InvoiceLine implements InvoiceLineInterface
     }
 
     /**
+     * @return float
+     *
+     * This method is for User-land code (if ever needed to extend this class)
+     */
+    public function getEstimatedAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
      * @return mixed
      */
     public function getPrice()
