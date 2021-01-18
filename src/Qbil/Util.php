@@ -6,6 +6,11 @@ class Util
 {
     public static function extract(array $property, $key, $subKey = 'Text')
     {
-        return $property[array_search($key, array_column($property, 'Type'))][$subKey];
+        $key  = array_search($key, array_column($property, 'Type'));
+        if (false === $key) {
+            return null;
+        }
+
+        return $property[$key][$subKey];
     }
 }
