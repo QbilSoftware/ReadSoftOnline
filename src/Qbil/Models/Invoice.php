@@ -30,11 +30,11 @@ class Invoice implements InvoiceInterface
         if ($includeInvoiceLines) {
             foreach (array_column(Util::extract($document->Tables, 'LineItem', 'TableRows'), 'ItemFields') as $line) {
                 $invoiceLine = new InvoiceLine(
-                    Util::extract($line, 'LIT_OrderNumber'),
-                    Util::extract($line, 'LIT_DeliveredQuantity'),
-                    Util::extract($line, 'LIT_VatExcludedAmount'),
-                    Util::extract($line, 'LIT_UnitPriceAmount'),
-                    Util::extract($line, 'LIT_Inkoopcontract'),
+                    Util::extract($line, 'LIT_OrderNumber') ?? null,
+                    Util::extract($line, 'LIT_DeliveredQuantity') ?? 0,
+                    Util::extract($line, 'LIT_VatExcludedAmount') ?? 0,
+                    Util::extract($line, 'LIT_UnitPriceAmount') ?? 0,
+                    Util::extract($line, 'LIT_Inkoopcontract') ?? null,
                     $document->DocumentSubType
                 );
 
