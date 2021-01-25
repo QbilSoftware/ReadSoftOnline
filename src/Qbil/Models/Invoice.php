@@ -26,6 +26,7 @@ class Invoice implements InvoiceInterface
         $this->ourVatRegistration = Util::extract($document->HeaderFields, 'CustomerVATRegistrationNumber');
         $this->orderNumber = Util::extract($document->HeaderFields, 'invoiceordernumber');
         $this->contract = Util::extract($document->HeaderFields, 'Inkoopcontract');
+        $this->vat = Util::extract($document->HeaderFields, 'vatCode');
 
         if ($includeInvoiceLines) {
             foreach (array_column(Util::extract($document->Tables, 'LineItem', 'TableRows'), 'ItemFields') as $line) {
@@ -55,6 +56,7 @@ class Invoice implements InvoiceInterface
     private $ourVatRegistration;
     private $orderNumber;
     private $contract;
+    private $vat;
     private $invoiceLines = [];
 
     public function addInvoiceLine(InvoiceLineInterface $invoiceLine)
@@ -164,5 +166,13 @@ class Invoice implements InvoiceInterface
     public function getContract()
     {
         return $this->contract;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVat()
+    {
+        return $this->vat;
     }
 }
