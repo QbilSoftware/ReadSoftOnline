@@ -23,4 +23,5 @@ interface InvoiceInterface
     public function getInvoiceLines();
     public function getOrder();
     public function getContract();
+    public function getVat();
 }
