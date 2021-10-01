@@ -10,7 +10,18 @@ namespace Qbil\ReadSoftOnline\Models;
 
 class InvoiceLine implements InvoiceLineInterface
 {
-    public function __construct(string $order, float $quantity, float $amount, float $price, string $purchaseContract, string $type, ?string $allocatedInvoice = null)
+    public function __construct(
+        string $order,
+        float $quantity,
+        float $amount,
+        float $price,
+        string $purchaseContract,
+        string $type,
+        ?string $allocatedInvoice = null,
+        ?float $qtyPerBox = 0,
+        ?int $noOfBoxes = 0,
+        ?Invoice $invoice = null
+    )
     {
         $this->order = $order;
         $this->quantity = $quantity;
@@ -19,6 +30,9 @@ class InvoiceLine implements InvoiceLineInterface
         $this->purchaseContract = $purchaseContract;
         $this->type = $type;
         $this->allocatedInvoice = $allocatedInvoice;
+        $this->qtyPerBox = $qtyPerBox;
+        $this->noOfBoxes = $noOfBoxes;
+        $this->invoice = $invoice;
     }
 
     private $order;
@@ -28,6 +42,9 @@ class InvoiceLine implements InvoiceLineInterface
     private $purchaseContract;
     private $type;
     private $allocatedInvoice;
+    public $qtyPerBox;
+    public $noOfBoxes;
+    public $invoice;
 
     /**
      * @return mixed
@@ -42,6 +59,10 @@ class InvoiceLine implements InvoiceLineInterface
      */
     public function getQuantity()
     {
+        if ($this->qtyPerBox > 0 || $this->noOfBoxes > 0) {
+            return $this->qtyPerBox * $this->qtyPerBox;
+        }
+
         return $this->quantity;
     }
 
@@ -50,6 +71,14 @@ class InvoiceLine implements InvoiceLineInterface
      */
     public function getAmount()
     {
+        if (!$this->invoice) {
+            return $this->amount;
+        }
+
+        if ($this->invoice->getDieselSurcharge() < 0) {
+            return (($this->invoice->getDieselSurcharge() * $this->amount) / 100) + $this->amount;
+        }
+
         return $this->amount;
     }
 
@@ -60,7 +89,11 @@ class InvoiceLine implements InvoiceLineInterface
      */
     public function getEstimatedAmount()
     {
-        return $this->amount;
+        if (!$this->invoice || $this->invoice->getDieselSurcharge() < 0) {
+            return $this->amount;
+        }
+
+        return (($this->invoice->getDieselSurcharge() * $this->amount) / 100) + $this->amount;
     }
 
     /**

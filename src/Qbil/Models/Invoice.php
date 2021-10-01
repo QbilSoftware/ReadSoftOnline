@@ -27,6 +27,7 @@ class Invoice implements InvoiceInterface
         $this->orderNumber = Util::extract($document->HeaderFields, 'invoiceordernumber');
         $this->contract = Util::extract($document->HeaderFields, 'Inkoopcontract');
         $this->vat = Util::extract($document->HeaderFields, 'vatCode');
+        $this->dieselSurcharge = Util::extract($document->HeaderFields, 'DieselSurcharge');
 
         if ($includeInvoiceLines) {
             foreach (array_column(Util::extract($document->Tables, 'LineItem', 'TableRows'), 'ItemFields') as $line) {
@@ -36,7 +37,11 @@ class Invoice implements InvoiceInterface
                     Util::extract($line, 'LIT_VatExcludedAmount') ?? 0,
                     Util::extract($line, 'LIT_UnitPriceAmount') ?? 0,
                     Util::extract($line, 'LIT_Inkoopcontract') ?? null,
-                    $document->DocumentSubType
+                    $document->DocumentSubType,
+                    null,
+                    Util::extract($line, 'LIT_qtyPerBox') ?? 0,
+                    Util::extract($line, 'LIT_nrBoxes') ?? 0,
+                    $this
                 );
 
                 $this->addInvoiceLine($invoiceLine);
@@ -57,6 +62,7 @@ class Invoice implements InvoiceInterface
     private $orderNumber;
     private $contract;
     private $vat;
+    private $dieselSurcharge;
     private $invoiceLines = [];
 
     public function addInvoiceLine(InvoiceLineInterface $invoiceLine)
@@ -86,14 +92,6 @@ class Invoice implements InvoiceInterface
     public function getSupplierInvoiceNumber()
     {
         return $this->supplierInvoiceNumber;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAmount()
-    {
-        return $this->amount;
     }
 
     /**
@@ -174,5 +172,22 @@ class Invoice implements InvoiceInterface
     public function getVat()
     {
         return $this->vat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDieselSurcharge()
+    {
+        return $this->dieselSurcharge;
+    }
+
+    public function getAmount()
+    {
+        if (!$this->dieselSurcharge || $this->getDieselSurcharge() < 0) {
+            return $this->amount;
+        }
+
+        return (($this->dieselSurcharge * $this->amount) / 100) + $this->amount;
     }
 }
