@@ -15,6 +15,7 @@ class Invoice implements InvoiceInterface
     public function __construct(Document $document, bool $includeInvoiceLines = true)
     {
         $this->relation = Util::extract($document->Parties, 'supplier', 'ExternalId');
+        $this->invoiceType = Util::extract($document->HeaderFields, 'InvoiceCredit');
         $this->subsidiary = Util::extract($document->Parties, 'buyer', 'ExternalId');
         $this->supplierInvoiceNumber = Util::extract($document->HeaderFields, 'invoicenumber');
         $this->amount = Util::extract($document->HeaderFields, 'invoicetotalvatexcludedamount');
@@ -50,6 +51,7 @@ class Invoice implements InvoiceInterface
     }
 
     private $relation;
+    private $invoiceType;
     private $subsidiary;
     private $supplierInvoiceNumber;
     private $amount;
@@ -180,6 +182,14 @@ class Invoice implements InvoiceInterface
     public function getDieselSurcharge()
     {
         return $this->dieselSurcharge;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceType()
+    {
+        return $this->invoiceType;
     }
 
     public function getAmount()
