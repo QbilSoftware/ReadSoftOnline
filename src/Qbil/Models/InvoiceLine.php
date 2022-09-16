@@ -127,4 +127,9 @@ class InvoiceLine implements InvoiceLineInterface
     {
         return $this->purchaseContract;
     }
+
+    public function setAllocatedInvoice(string $allocatedInvoice)
+    {
+        $this->allocatedInvoice = $allocatedInvoice;
+    }
 }
