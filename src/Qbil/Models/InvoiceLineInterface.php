@@ -13,5 +13,6 @@ interface InvoiceLineInterface
     public function getPrice();
     public function getType();
     public function getAllocatedInvoice();
+    public function setAllocatedInvoice(string $allocatedInvoice);
     public function getPurchaseContract();
 }
