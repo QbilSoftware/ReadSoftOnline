@@ -128,6 +128,14 @@ class InvoiceLine implements InvoiceLineInterface
         return $this->purchaseContract;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getVatCode()
+    {
+        return null;
+    }
+
     public function setAllocatedInvoice(string $allocatedInvoice)
     {
         $this->allocatedInvoice = $allocatedInvoice;

@@ -15,4 +15,5 @@ interface InvoiceLineInterface
     public function getAllocatedInvoice();
     public function setAllocatedInvoice(string $allocatedInvoice);
     public function getPurchaseContract();
+    public function getVatCode();
 }
