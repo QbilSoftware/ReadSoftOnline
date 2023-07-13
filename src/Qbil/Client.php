@@ -187,7 +187,7 @@ class Client
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function setDocumentStatus(Document $document, $status)
+    public function setDocumentStatus(Document $document, $status, $message = null)
     {
         return json_decode(
             $this
@@ -197,7 +197,7 @@ class Client
                     [
                         'json' => [
                             'Status' => $status,
-                            'Message' => null,
+                            'Message' => $message,
                             'CodingLines' => null,
                             'CorrelationData' => null,
                             'ExternalId' => null,
