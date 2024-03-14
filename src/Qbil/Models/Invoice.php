@@ -15,6 +15,7 @@ class Invoice implements InvoiceInterface
     public function __construct(Document $document, bool $includeInvoiceLines = true)
     {
         $this->relation = Util::extract($document->Parties, 'supplier', 'ExternalId');
+        $this->trackId = $document->TrackId;
         $this->creditInvoice = Util::extract($document->HeaderFields, 'creditinvoice');
         $this->subsidiary = Util::extract($document->Parties, 'buyer', 'ExternalId');
         $this->supplierInvoiceNumber = Util::extract($document->HeaderFields, 'invoicenumber');
@@ -51,6 +52,7 @@ class Invoice implements InvoiceInterface
     }
 
     private $relation;
+    private $trackId;
     private $creditInvoice;
     private $subsidiary;
     private $supplierInvoiceNumber;
@@ -78,6 +80,14 @@ class Invoice implements InvoiceInterface
     public function getRelation()
     {
         return $this->relation;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTrackId()
+    {
+        return $this->trackId;
     }
 
     /**
