@@ -8,6 +8,7 @@ interface InvoiceInterface
 {
     public function addInvoiceLine(InvoiceLineInterface $invoiceLine);
     public function getRelation();
+    public function getTrackId();
     public function isCreditInvoice();
     public function getSubsidiary();
     public function getSupplierInvoiceNumber();
