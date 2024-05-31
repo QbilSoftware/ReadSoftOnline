@@ -211,7 +211,7 @@ class Supplier implements \JsonSerializable
      * which is a value of any type other than a resource.
      * @since 5.4.0
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return array_reduce(
             array_keys($supplier = get_object_vars($this)),
